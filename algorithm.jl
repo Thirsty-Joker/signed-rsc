@@ -10,12 +10,9 @@ function simple_wilson(g::NormalWeightedDiGraph{Float64}, sample_num::Int)
     next = Vector{Int}(undef, n)
     root = Vector{Int}(undef, n)
     wei=zeros(Float64,n)
-
     for u in 1:n
         wei[u]=sum(g.weights[u])
     end
-
-    
     ans = zeros(Float64, n)
     for _ in 1:sample_num
         fill!(in_forests, false)
@@ -49,19 +46,16 @@ end
 function simple_enhanced_wilson(g::NormalWeightedDiGraph{Float64}, sample_num::Int)
     n = num_nodes(g)
     nodes= round(Int,n/2)
-    d,sp_A=diagadj(g)
+    _,sp_A=diagadj(g)
     in_forests = Vector{Bool}(undef,n)
     next = Vector{Int}(undef,n)
     root = Vector{Int}(undef,n)
-
     wei=zeros(Float64,n)
     ans = zeros(Float64, n)
-
     for u in 1:n
         wei[u]=sum(g.weights[u])
         ans[u]=1/(1+wei[u])
     end
-
     for _ in 1:sample_num
         fill!(in_forests, false)
         for src in 1:nodes
@@ -111,12 +105,9 @@ function jl_solver(alpha,G,degree,epsilon)
         q[i]=1-alpha*degree[i]
     end
     Q=sparse(u,u,q)
-    
-    
     k = round(Int64, 24*log(G.n) / (epsilon^2)) + 1
     println("k=$k")
     c=zeros(n)
-    t1=time()
     for _ in 1:k
         m1=rand([1,-1],2*n)
         p1=rand([1,-1],2*m)
@@ -129,8 +120,6 @@ function jl_solver(alpha,G,degree,epsilon)
             c[i]+=((z1[i]-z1[i+n])^2/k+alpha*(z2[i]-z2[i+n])^2/k)/2
         end
     end
-    t2=time()
-    println("JL_solver done:",t2-t1,"s")
     return c
 end
 

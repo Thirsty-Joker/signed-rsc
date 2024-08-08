@@ -1,11 +1,9 @@
-include("new_grpah.jl")
+include("new_graph.jl")
 include("algorithm.jl")
 
 using GraphDatasets
-using GeneralGraphs, LinearAlgebraUtils, ProgressMeter
+using GeneralGraphs, LinearAlgebraUtils
 using LinearAlgebra, SparseArrays
-using StatsBase, CSV, DataFrames 
-using Laplacians
 
 function initialize(file::AbstractString)
     file=split(file)[1]
