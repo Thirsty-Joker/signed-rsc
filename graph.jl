@@ -84,7 +84,6 @@ function twice_adjacency(G)
 	return sparse(u,v,w)
 end
 
-# 关联矩阵
 function incidence_matrix(G)
 	u=zeros(4*G.m)
 	v=zeros(4*G.m)
