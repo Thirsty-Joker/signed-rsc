@@ -15,6 +15,7 @@ function simple_wilson(g::NormalWeightedDiGraph{Float64}, sample_num::Int)
         wei[u]=sum(g.weights[u])
     end
 
+    
     ans = zeros(Float64, n)
     for _ in 1:sample_num
         fill!(in_forests, false)
