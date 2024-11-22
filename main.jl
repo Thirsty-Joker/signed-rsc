@@ -22,44 +22,41 @@ end
 fname=open("input/data.txt","r")
 str=readline(fname)
 num=parse(Int,str)
-for nnnn in 1:num
-    println("Number=$nnnn")
+for file_num in 1:num
+    @show file_num
     str=readline(fname)
     A_signed,g,degree,alpha,n=initialize(str)
     println("start computing")
 
     #exact
-    q1=zeros(n)
+    exactRSC=zeros(n)
     std=inv(I - alpha* Matrix(A_signed))
     for o in 1:n
-        q1[o]=std[o,o]
+        exactRSC[o]=std[o,o]
     end
 
     G=read_data(file)
-    q2=zeros(n)
-    q3=zeros(n)
 
-    eps=[0.3,0.2,0.1]
-    lll=[2000,6000,10000]
+    eps=[0.2,0.1]
+    lll=[1000,2000]
 
-    for m in 1:1
+    for m in 1:2
         ll=lll[m]
         epsilon=eps[m]
 
-        #approx_forest
-        c2 = simple_wilson(g, ll) 
-        q2=subgraph_centrality(c2,g,alpha,degree)
+        #simpleRSC
+        simpleRSC = simple_RSC(g, ll) 
 
-        #enhanced_forest
-        c3=simple_enhanced_wilson(g,ll)
-        q3=subgraph_centrality(c3,g,alpha,degree)
+        #groupRSC
+        groupRSC=group_RSC(g,ll)
 
-        #solver
-        q4=jl_solver(alpha,G,degree,epsilon)
+        #neighborRSC
+        neighborRSC=neighbor_RSC(g,ll)
 
-        for i in 1:n
-            println(q1[i]," ",q2[i]," ",q3[i]," ",q4[i])
-        end
+        #solverRSC
+        solverRSC=jl_solver(alpha,G,degree,epsilon)
+
+        @show simpleRSC,groupRSC,neighborRSC,solverRSC
     end    
     println("---------------------------------------------")
 end
